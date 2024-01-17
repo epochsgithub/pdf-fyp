@@ -2,9 +2,14 @@
   margin: 0;
   padding: 0;
 }
+html {
+  overflow: hidden !important;
+}
 
 body {
   background-color: #eaeaea;
+  min-height: 100vh;
+  overflow: hidden;
 }
 
 .text-center {

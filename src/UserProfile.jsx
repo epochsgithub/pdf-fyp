@@ -13,7 +13,8 @@ import {
 import React from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
-export default function Login() {
+import { AccountCircle } from "@mui/icons-material";
+export default function UserProfile() {
   const [showPassword, setShowPassword] = React.useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -30,7 +31,7 @@ export default function Login() {
         background: `linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url(https://cutewallpaper.org/28/darwin-laptop-wallpaper/brand-managers-rely-on-thought-leadership-press-by-trudy-darwin-communications-medium.jpeg)`,
       }}
     >
-      <Grid item xs={8}></Grid>
+      <Grid item xs={4}></Grid>
       <Grid item xs={4}>
         <Card
           elevation={10}
@@ -43,36 +44,24 @@ export default function Login() {
             padding: "0px 20px",
           }}
         >
-          <Typography variant="h5">Login</Typography>
+          <img
+            style={{ width: 150, height: 150 }}
+            src="https://static.vecteezy.com/system/resources/previews/019/896/008/original/male-user-avatar-icon-in-flat-design-style-person-signs-illustration-png.png"
+            alt=""
+          />
           <br />
-          <TextField size="small" label="Email" fullWidth />
-          <br />
-          <FormControl fullWidth variant="outlined" size="small">
-            <InputLabel htmlFor="outlined-adornment-password">
-              Password
-            </InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-password"
-              type={showPassword ? "text" : "password"}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                    edge="end"
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-              label="Password"
-            />
-          </FormControl>
-          <br />
-          <Button fullWidth variant="contained" size="small">
-            Login
-          </Button>
+          <Typography>
+            <strong>First name:</strong> Ayaz
+          </Typography>
+          <Typography>
+            <strong>Last name:</strong> Hassan
+          </Typography>
+          <Typography>
+            <strong>Username:</strong> ayaz-hassan
+          </Typography>
+          <Typography>
+            <strong>Email:</strong> ayaz@gmail.com
+          </Typography>
         </Card>
       </Grid>
       {/* <Grid item xs={3}></Grid> */}

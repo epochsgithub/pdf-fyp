@@ -28,6 +28,7 @@ export default function Signup() {
       container
       spacing={2}
       style={{
+        backgroundSize: "cover",
         background: `linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.5)),url(https://cutewallpaper.org/28/darwin-laptop-wallpaper/brand-managers-rely-on-thought-leadership-press-by-trudy-darwin-communications-medium.jpeg)`,
       }}
     >
