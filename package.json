@@ -15,8 +15,8 @@
     "@mui/icons-material": "^5.14.5",
     "@mui/material": "^5.15.5",
     "@mui/styled-engine-sc": "^6.0.0-alpha.12",
-    "@react-pdf-viewer/core": "2.4.2",
-    "@react-pdf-viewer/default-layout": "2.4.2",
+    "@react-pdf-viewer/core": "^2.4.2",
+    "@react-pdf-viewer/default-layout": "^2.4.2",
     "@react-pdf-viewer/full-screen": "2.4.2",
     "@react-pdf-viewer/highlight": "2.4.2",
     "@react-pdf-viewer/open": "2.4.2",
@@ -27,12 +27,16 @@
     "@react-pdf-viewer/toolbar": "2.4.2",
     "@react-pdf-viewer/zoom": "2.4.2",
     "@react-pdf/renderer": "^3.0.1",
+    "axios": "^1.6.7",
+    "bulma": "^0.9.4",
+    "bulma-helper": "^0.0.3",
     "node-sass": "^9.0.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.21.2",
     "sass": "^1.69.7",
-    "styled-components": "^6.1.8"
+    "styled-components": "^6.1.8",
+    "sweetalert2": "^11.10.5"
   },
   "devDependencies": {
     "@types/react": "^18.2.43",
