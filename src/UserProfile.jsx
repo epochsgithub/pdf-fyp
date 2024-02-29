@@ -14,14 +14,23 @@ import React from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
 import { AccountCircle } from "@mui/icons-material";
+import { authHeaders, baseUrl } from "./contants";
+import axios from "axios";
 export default function UserProfile() {
   const [showPassword, setShowPassword] = React.useState(false);
-
+  const [profile, setProfile] = React.useState("");
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
+  const getProfile = () => {
+    axios.get(`${baseUrl}/account/profile/`, authHeaders).then((res) => {
+      console.log("res", res)
+      setProfile(res.data)
+    })
+  };
+  React.useEffect(() => { getProfile() }, [])
   return (
     <Grid
       container
@@ -51,16 +60,16 @@ export default function UserProfile() {
           />
           <br />
           <Typography>
-            <strong>First name:</strong> Ayaz
+            <strong>Name:</strong> {profile && profile.name ? profile.name : "---"}
           </Typography>
           <Typography>
-            <strong>Last name:</strong> Hassan
+            <strong>Phone:</strong> {profile && profile.phone ? profile.phone : "---"}
           </Typography>
           <Typography>
-            <strong>Username:</strong> ayaz-hassan
+            <strong>Email:</strong> {profile && profile.email ? profile.email : "---"}
           </Typography>
           <Typography>
-            <strong>Email:</strong> ayaz@gmail.com
+            <strong>Date of birth:</strong> {profile && profile.dob ? profile.dob : "---"}
           </Typography>
         </Card>
       </Grid>

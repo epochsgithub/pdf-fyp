@@ -25,9 +25,11 @@ import {
   DashboardSharp,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { Card, CardContent, Grid } from "@mui/material";
-import { userName } from "./contants";
+import { Card, CardContent, Grid, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from "@mui/material";
+import axios from "axios";
+import { authHeaders, baseUrl, userName } from "./contants";
 import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
+
 
 const drawerWidth = 240;
 
@@ -96,10 +98,11 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function Dashboard() {
+export default function PDFTable() {
   const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [data, setData] = React.useState("");
 
   const handleDrawerOpen = () => {
     setOpen(true);
@@ -108,7 +111,15 @@ export default function Dashboard() {
   const handleDrawerClose = () => {
     setOpen(false);
   };
-
+  const getPDF = () => {
+    axios.get(`${baseUrl}/pdfeditor/pdf-file/`, authHeaders).then((res) => {
+      setData(res.data.results)
+      console.log("res", res)
+    })
+  };
+  React.useEffect(() => {
+    getPDF();
+  }, [])
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -258,7 +269,7 @@ export default function Dashboard() {
         <Grid container>
           <Grid item xs={3}></Grid>
           <Grid item xs={6}>
-            <Card elevation={10} style={{}}>
+            {/* <Card elevation={10} style={{}}>
               <CardContent>
                 <Typography>
                   <strong>PDF created:</strong> 100
@@ -273,7 +284,39 @@ export default function Dashboard() {
                   <strong>PDF deleted:</strong> 50
                 </Typography>
               </CardContent>
-            </Card>
+            </Card> */}
+            <TableContainer component={Paper}>
+
+              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Id</TableCell>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Convert file</TableCell>
+                    <TableCell>Created at</TableCell>
+                    <TableCell>Updated at</TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {data && data.map((row) => (
+                    <TableRow
+                      key={row.id}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        {row.id}
+                      </TableCell>
+                      <TableCell >{row.name}</TableCell>
+                      <TableCell> <a target="blank" href={row.convertfile}>
+                        View file
+                      </a></TableCell>
+                      <TableCell >{row.created_at}</TableCell>
+                      <TableCell >{row.updated_at}</TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
           </Grid>
           {/* <Grid item xs={3}></Grid> */}
         </Grid>

@@ -3,6 +3,7 @@ import {
   Card,
   CircularProgress,
   FormControl,
+  FormGroup,
   Grid,
   IconButton,
   InputAdornment,
@@ -14,29 +15,33 @@ import {
 import React from "react";
 import Visibility from "@mui/icons-material/Visibility";
 import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import OtpInput from "react-otp-input";
+import { Label } from "@mui/icons-material";
 import axios from "axios";
-import Swal from "sweetalert2";
 import { baseUrl } from "./contants";
+import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-export default function Signup() {
-  const [showPassword, setShowPassword] = React.useState(false);
-  const [showPassword2, setShowPassword2] = React.useState(false);
-  const navigate = useNavigate();
 
+
+
+export default function ResetPassword() {
+  const [showPassword, setShowPassword] = React.useState(false);
+  const [showCPassword, setShowCPassword] = React.useState(false);
   const [values, setValues] = React.useState("");
   const [processing, setProcessing] = React.useState(false);
+  const navigate = useNavigate();
 
   const handleChange = (prop) => (e) => {
     setValues({ ...values, [prop]: e.target.value });
   };
 
+
   const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleClickShowPassword2 = () => setShowPassword2((show) => !show);
+  const handleClickShowConfirmPassword = () => setShowCPassword((show) => !show);
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
   };
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (values.password.length < 8) {
@@ -49,7 +54,7 @@ export default function Signup() {
     }
     setProcessing(true);
     axios
-      .post(`${baseUrl}/account/signup/`, values)
+      .post(`${baseUrl}/account/reset/password/complete/`, values)
       .then((res) => {
         setProcessing(false);
         Swal.fire({ icon: "success", html: res.data.success }).then(() => {
@@ -60,8 +65,11 @@ export default function Signup() {
       .catch((e) => {
         setProcessing(false);
         console.log(e.response);
-        if (e.response && e.response.status === 400) {
-          Swal.fire({ icon: "error", html: e.response.data.email });
+        if (e.response && e.response.status === 400 && e.response.data.password) {
+          Swal.fire({ icon: "error", html: e.response.data.password });
+        }
+        if (e.response && e.response.status === 400 && e.response.data.error) {
+          Swal.fire({ icon: "error", html: e.response.data.error });
         }
       });
   };
@@ -88,40 +96,11 @@ export default function Signup() {
               padding: "0px 20px",
             }}
           >
-            <Typography variant="h5">Signup</Typography>
+            <Typography variant="h5">Reset Password</Typography>
             <br />
-
-            <TextField
-              margin="normal"
-              size="small"
-              label="Name"
-              fullWidth
-              onChange={handleChange("name")}
-              values={values.email}
-              required
-            />
-            <br />
-            <TextField
-              margin="normal"
-              size="small"
-              label="Phone"
-              fullWidth
-              onChange={handleChange("phone")}
-              values={values.phone}
-              required
-              type="number"
-            />
-            <br />
-            <TextField
-              margin="normal"
-              size="small"
-              label="Email"
-              fullWidth
-              onChange={handleChange("email")}
-              values={values.email}
-              required
-              type="email"
-            />
+            <TextField margin="normal" size="small" label="OTP" fullWidth onChange={handleChange("otp")}
+              values={values.otp}
+              required />
             <br />
             <FormControl margin="normal" fullWidth variant="outlined" size="small">
               <InputLabel margin="normal" htmlFor="outlined-adornment-password">
@@ -155,16 +134,16 @@ export default function Signup() {
               </InputLabel>
               <OutlinedInput
                 id="outlined-adornment-password"
-                type={showPassword2 ? "text" : "password"}
+                type={showCPassword ? "text" : "password"}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
                       aria-label="toggle password visibility"
-                      onClick={handleClickShowPassword2}
+                      onClick={handleClickShowConfirmPassword}
                       onMouseDown={handleMouseDownPassword}
                       edge="end"
                     >
-                      {showPassword2 ? <VisibilityOff /> : <Visibility />}
+                      {showCPassword ? <VisibilityOff /> : <Visibility />}
                     </IconButton>
                   </InputAdornment>
                 }
@@ -175,16 +154,13 @@ export default function Signup() {
               />
             </FormControl>
             <br />
-            <Button
-              margin="normal"
-              type="submit"
+            <Button margin="normal" type="submit"
               fullWidth
               variant="contained"
               size="small"
               disabled={processing}
-              endIcon={processing && <CircularProgress size={"small"} />}
-            >
-              Sign up
+              endIcon={processing && <CircularProgress size={"small"} />}>
+              Reset password
             </Button>
           </Card>
         </form>

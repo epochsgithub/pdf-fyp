@@ -15,3 +15,16 @@ body {
 .text-center {
   text-align: center;
 }
+.otp-form {
+  input {
+    width: 2.5rem !important;
+    aspect-ratio: 1/1;
+    // height: 2.5rem;
+    margin: auto;
+    font-size: 16px;
+    text-align: center;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    // display: none;
+  }
+}
