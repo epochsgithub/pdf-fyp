@@ -1,6 +1,6 @@
 // export const baseUrl = "https://brave-nearly-pug.ngrok-free.app/api";
-export const baseUrl = `${window.location.origin}/api`;
-// export const baseUrl = "http://192.168.100.2:9090/api";
+// export const baseUrl = `${window.location.origin}/api`;
+export const baseUrl = "http://192.168.100.3:9090/api";
 export const userName = localStorage.getItem("name");
 export const access = localStorage.getItem("accessToken");
 export const refreshAccess = localStorage.getItem("refreshToken");

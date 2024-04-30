@@ -33,8 +33,6 @@ import { authHeaders, baseUrl, userName } from "./contants";
 import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
 import { Button, Modal, ModalHeader } from "reactstrap";
 import Swal from "sweetalert2";
-import GroupsIcon from '@mui/icons-material/Groups';
-
 
 
 const drawerWidth = 240;
@@ -104,7 +102,7 @@ const Drawer = styled(MuiDrawer, {
   }),
 }));
 
-export default function PDFTable() {
+export default function CollabTable() {
   const navigate = useNavigate();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -123,37 +121,11 @@ export default function PDFTable() {
     setOpen(false);
   };
   const getPDF = () => {
-    axios.get(`${baseUrl}/pdfeditor/pdf-file/`, authHeaders).then((res) => {
+    axios.get(`${baseUrl}/pdfeditor/collaboration/`, authHeaders).then((res) => {
       setData(res.data.results)
       console.log("res", res)
     })
   };
-  const getUser = () => {
-    axios.get(`${baseUrl}/account/users/`, authHeaders).then((res) => {
-      setUserData(res.data.results)
-      console.log("res", res)
-    })
-  };
-  const handleSelection = (arg) => {
-    if (selectedUser.includes(arg)) {
-      setSelectedUser(selectedUser.filter((i) => i !== arg));
-    } else {
-      setSelectedUser([...selectedUser, arg]);
-    }
-  };
-  const handleSubmitCollabration = () => {
-    const data = {
-      user: selectedUser[0],
-      converted_file: fileId
-    }
-    axios.post(`${baseUrl}/pdfeditor/collaboration/`, data, authHeaders).then((res) => {
-      setOpenModal(false)
-      setSelectedUser([])
-      setFileId("")
-      Swal.fire({ icon: "success", html: "File shared successfully" });
-    })
-
-  }
   React.useEffect(() => {
     getPDF();
   }, [])
@@ -178,7 +150,14 @@ export default function PDFTable() {
               <MenuIcon />
             </IconButton>
             <Typography variant="h6" noWrap component="div">
-              {userName}
+              <div style={{ display: "flex" }}>
+                <div>
+                  {userName}
+                </div>
+                <div>
+                  werty
+                </div>
+              </div>
             </Typography>
           </Toolbar>
         </AppBar>
@@ -302,33 +281,6 @@ export default function PDFTable() {
                 />
               </ListItemButton>
             </ListItem>
-            <ListItem
-              onClick={() => navigate("/collaboration")}
-              disablePadding
-              sx={{ display: "block" }}
-            >
-              <ListItemButton
-                sx={{
-                  minHeight: 48,
-                  justifyContent: open ? "initial" : "center",
-                  px: 2.5,
-                }}
-              >
-                <ListItemIcon
-                  sx={{
-                    minWidth: 0,
-                    mr: open ? 3 : "auto",
-                    justifyContent: "center",
-                  }}
-                >
-                  <GroupsIcon />
-                </ListItemIcon>
-                <ListItemText
-                  primary={"User profile"}
-                  sx={{ opacity: open ? 1 : 0 }}
-                />
-              </ListItemButton>
-            </ListItem>
           </List>
         </Drawer>
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
@@ -358,11 +310,8 @@ export default function PDFTable() {
                   <TableHead>
                     <TableRow>
                       <TableCell>Id</TableCell>
-                      <TableCell>Name</TableCell>
-                      <TableCell>Convert file</TableCell>
-                      <TableCell>Created at</TableCell>
-                      <TableCell>Updated at</TableCell>
-                      <TableCell>Share</TableCell>
+                      <TableCell>Shared with</TableCell>
+                      <TableCell>File</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -374,23 +323,11 @@ export default function PDFTable() {
                         <TableCell component="th" scope="row">
                           {row.id}
                         </TableCell>
-                        <TableCell >{row.name}</TableCell>
-                        <TableCell> <a target="blank" href={row.convertfile}>
+                        <TableCell >{row.share_with.user_email}</TableCell>
+                        <TableCell> <a target="blank" href={row.file_data.file}>
                           View file
                         </a></TableCell>
-                        <TableCell >{row.created_at}</TableCell>
-                        <TableCell >{row.updated_at}</TableCell>
-                        <TableCell>
-                          <BiShare size={20} onClick={() => {
-                            setOpenModal(true);
-                            getUser();
-                            setFileId(row.id)
-                          }} />
-                          {/* <Button onClick={() => {
-                            setOpenModal(true);
-                            console.log("click")
-                          }}>share</Button> */}
-                        </TableCell>
+
                       </TableRow>
                     ))}
                   </TableBody>
@@ -401,45 +338,6 @@ export default function PDFTable() {
           </Grid>
         </Box>
       </Box>
-      <Dialog open={openModal} onClose={() => setOpenModal(false)}>
-        <DialogTitle>Share</DialogTitle>
-        <DialogContent>
-          <TableContainer component={Paper}>
-
-            <Table sx={{ minWidth: 500 }} aria-label="simple table">
-              <TableHead>
-                <TableRow>
-                  <TableCell></TableCell>
-                  <TableCell>Name</TableCell>
-                  <TableCell>Email</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {userData && userData.map((row) => (
-                  <TableRow
-                    key={row.id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      <Checkbox
-                        checked={selectedUser.includes(row.id)}
-                        onChange={() => {
-                          handleSelection(row.id);
-                        }} />
-                    </TableCell>
-                    <TableCell >{row.name}</TableCell>
-                    <TableCell>{row.email}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={() => handleSubmitCollabration()}>Submit</Button>
-          <Button onClick={() => setOpenModal(false)}>Cancel</Button>
-        </DialogActions>
-      </Dialog>
     </React.Fragment>
   );
 }

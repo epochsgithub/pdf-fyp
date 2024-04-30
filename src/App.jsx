@@ -11,6 +11,7 @@ import Dashboard from "./Dashboard";
 import ForgetPassword from "./ForgetPassword";
 import ResetPassword from "./ResetPassword";
 import PDFTable from "./PDFTable";
+import CollabTable from "./CollabTable";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -30,6 +31,7 @@ function App() {
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/user" element={<UserProfile />} />
         <Route path="/table" element={<PDFTable />} />
+        <Route path="/collaboration" element={<CollabTable />} />
       </Routes>
     </BrowserRouter>
   );

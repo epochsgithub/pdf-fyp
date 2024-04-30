@@ -19,6 +19,7 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import ViewListIcon from '@mui/icons-material/ViewList';
+import GroupsIcon from '@mui/icons-material/Groups';
 import {
   AccountCircle,
   DashboardCustomize,
@@ -244,6 +245,33 @@ export default function Dashboard() {
                 }}
               >
                 <ViewListIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={"User profile"}
+                sx={{ opacity: open ? 1 : 0 }}
+              />
+            </ListItemButton>
+          </ListItem>
+          <ListItem
+            onClick={() => navigate("/collaboration")}
+            disablePadding
+            sx={{ display: "block" }}
+          >
+            <ListItemButton
+              sx={{
+                minHeight: 48,
+                justifyContent: open ? "initial" : "center",
+                px: 2.5,
+              }}
+            >
+              <ListItemIcon
+                sx={{
+                  minWidth: 0,
+                  mr: open ? 3 : "auto",
+                  justifyContent: "center",
+                }}
+              >
+                <GroupsIcon />
               </ListItemIcon>
               <ListItemText
                 primary={"User profile"}
