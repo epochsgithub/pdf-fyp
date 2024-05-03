@@ -20,6 +20,8 @@ import ListItemText from "@mui/material/ListItemText";
 import InboxIcon from "@mui/icons-material/MoveToInbox";
 import MailIcon from "@mui/icons-material/Mail";
 import ViewListIcon from '@mui/icons-material/ViewList';
+import GroupsIcon from '@mui/icons-material/Groups';
+
 import {
   AccountCircle,
   CheckBox,
@@ -33,6 +35,7 @@ import { authHeaders, baseUrl, userName } from "./contants";
 import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
 import { Button, Modal, ModalHeader } from "reactstrap";
 import Swal from "sweetalert2";
+import NotificationDropdown from "./NotificationDropdown";
 
 
 const drawerWidth = 240;
@@ -149,16 +152,14 @@ export default function CollabTable() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap component="div">
-              <div style={{ display: "flex" }}>
-                <div>
-                  {userName}
-                </div>
-                <div>
-                  werty
-                </div>
+            <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+              <div>
+                {userName}
               </div>
-            </Typography>
+              <div>
+                <NotificationDropdown />
+              </div>
+            </div>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -281,6 +282,33 @@ export default function CollabTable() {
                 />
               </ListItemButton>
             </ListItem>
+            <ListItem
+              onClick={() => navigate("/collaboration")}
+              disablePadding
+              sx={{ display: "block" }}
+            >
+              <ListItemButton
+                sx={{
+                  minHeight: 48,
+                  justifyContent: open ? "initial" : "center",
+                  px: 2.5,
+                }}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 0,
+                    mr: open ? 3 : "auto",
+                    justifyContent: "center",
+                  }}
+                >
+                  <GroupsIcon />
+                </ListItemIcon>
+                <ListItemText
+                  primary={"User profile"}
+                  sx={{ opacity: open ? 1 : 0 }}
+                />
+              </ListItemButton>
+            </ListItem>
           </List>
         </Drawer>
         <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
@@ -338,6 +366,6 @@ export default function CollabTable() {
           </Grid>
         </Box>
       </Box>
-    </React.Fragment>
+    </React.Fragment >
   );
 }
