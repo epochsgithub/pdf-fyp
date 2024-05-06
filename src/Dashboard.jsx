@@ -29,6 +29,7 @@ import { useNavigate } from "react-router-dom";
 import { Card, CardContent, Grid } from "@mui/material";
 import { userName } from "./contants";
 import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
+import NotificationDropdown from "./NotificationDropdown";
 
 const drawerWidth = 240;
 
@@ -127,9 +128,14 @@ export default function Dashboard() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
-            {userName}
-          </Typography>
+          <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+            <div>
+              {userName}
+            </div>
+            <div>
+              <NotificationDropdown />
+            </div>
+          </div>
         </Toolbar>
       </AppBar>
       <Drawer variant="permanent" open={open}>
@@ -286,7 +292,7 @@ export default function Dashboard() {
         <Grid container>
           <Grid item xs={3}></Grid>
           <Grid item xs={6}>
-            <Card elevation={10} style={{}}>
+            <Card elevation={5} style={{}}>
               <CardContent>
                 <Typography>
                   <strong>PDF created:</strong> 100

@@ -1,3 +1,4 @@
+import { AiOutlineCloudUpload } from "react-icons/ai";
 import { BiShare } from "react-icons/bi";
 import * as React from "react";
 import { styled, useTheme } from "@mui/material/styles";
@@ -34,6 +35,7 @@ import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
 import { Button, Modal, ModalHeader } from "reactstrap";
 import Swal from "sweetalert2";
 import GroupsIcon from '@mui/icons-material/Groups';
+import NotificationDropdown from "./NotificationDropdown";
 
 
 
@@ -153,7 +155,12 @@ export default function PDFTable() {
       Swal.fire({ icon: "success", html: "File shared successfully" });
     })
 
-  }
+  };
+  const uploadtoGoogleDrive = (item) => {
+    axios.post(`${baseUrl}/pdfeditor/uploadfile/googledrive/${item}/`, {}, authHeaders).then((res) => {
+      Swal.fire({ icon: "success", html: "File uploaded successfully" });
+    })
+  };
   React.useEffect(() => {
     getPDF();
   }, [])
@@ -177,9 +184,14 @@ export default function PDFTable() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography variant="h6" noWrap component="div">
-              {userName}
-            </Typography>
+            <div style={{ display: "flex", justifyContent: "space-between", width: "100%" }}>
+              <div>
+                {userName}
+              </div>
+              <div>
+                <NotificationDropdown />
+              </div>
+            </div>
           </Toolbar>
         </AppBar>
         <Drawer variant="permanent" open={open}>
@@ -362,6 +374,7 @@ export default function PDFTable() {
                       <TableCell>Convert file</TableCell>
                       <TableCell>Created at</TableCell>
                       <TableCell>Updated at</TableCell>
+                      <TableCell>Google drive</TableCell>
                       <TableCell>Share</TableCell>
                     </TableRow>
                   </TableHead>
@@ -380,6 +393,7 @@ export default function PDFTable() {
                         </a></TableCell>
                         <TableCell >{row.created_at}</TableCell>
                         <TableCell >{row.updated_at}</TableCell>
+                        <TableCell ><AiOutlineCloudUpload size={20} onClick={() => uploadtoGoogleDrive(row.id)} /></TableCell>
                         <TableCell>
                           <BiShare size={20} onClick={() => {
                             setOpenModal(true);

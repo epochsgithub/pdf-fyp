@@ -2,18 +2,20 @@ import React, { Fragment, useEffect, useState } from 'react'
 import { authHeaders, baseUrl } from './contants';
 import axios from 'axios';
 import { BsBellFill } from 'react-icons/bs';
-import { Dropdown, DropdownMenu, DropdownToggle, Spinner } from 'reactstrap';
+import { Button, Dropdown, DropdownMenu, DropdownToggle, Modal, ModalBody, ModalHeader, Spinner } from 'reactstrap';
 import PerfectScrollbar from "react-perfect-scrollbar";
 import Avatar from "react-avatar";
 import classNames from 'classnames';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Paper, TableContainer } from '@mui/material';
 
 function NotificationDropdown({ direction, ...args }) {
     const [notification, setnotification] = useState({});
     const [notifications, setnotifications] = useState([]);
     const [notifier, setNotifier] = useState(null);
     const [open, setOpen] = useState(false);
+    const [openModal, setOpenModal] = useState(false);
     const [reading, setReading] = useState(false);
-    const [id, setid] = useState("");
+    const [modalData, setModalData] = useState("");
 
     const getData = () => {
         axios.get(`${baseUrl}/pdfeditor/notification/`, authHeaders)
@@ -74,7 +76,7 @@ function NotificationDropdown({ direction, ...args }) {
         // console.log("allNotification", allNotification);
         // setnotification(allNotification);
         setNotifier(item.id);
-        axios.patch(`${baseUrl}/pdfeditor/notification/${item.id}/`, { read: true })
+        axios.patch(`${baseUrl}/pdfeditor/notification/${item.id}/`, { read: true }, authHeaders)
             .then((res) => {
                 setNotifier(null);
                 // window.location.assign(
@@ -117,12 +119,11 @@ function NotificationDropdown({ direction, ...args }) {
                     onClick={() => setOpen(!open)}
                 >
                     {notification &&
-                        notification.unread_notifications &&
-                        notification.unread_notifications.count != 0 ? (
+                        notification.unread_notifications != 0 ? (
                         <div className="notification-badge">
-                            {/* {notification.unread_notifications.count > 99
-              ? "99+"
-              : notification.unread_notifications.count} */}
+                            {notification.unread_notifications > 99
+                                ? "99+"
+                                : notification.unread_notifications}
                         </div>
                     ) : (
                         ""
@@ -135,8 +136,7 @@ function NotificationDropdown({ direction, ...args }) {
                         <span>
                             Unread notifications{" "}
                             {notification &&
-                                notification.unread_notifications &&
-                                notification.unread_notifications.count}
+                                notification.total_unread_notification}
                             &nbsp;&nbsp;
                         </span>
                     </div>
@@ -155,35 +155,40 @@ function NotificationDropdown({ direction, ...args }) {
                                         onClick={() => {
                                             notifier === null && readMessage(item);
                                         }}
-                                    >
-                                        <div className="d-flex">
-                                            <Avatar
-                                                style={{ background: "#2B76D2", marginRight: "10px" }}
-                                                name={item.notification_title}
-                                                size="30"
-                                                round
-                                                color="primary"
-                                            />
 
-                                            <div style={{ paddingRight: "10px" }}>
-                                                <h6>
-                                                    {item.notification_title}
-                                                    {/* {notifier === item.id && (
+                                    >
+                                        <button onClick={() => {
+                                            setOpenModal(true);
+                                            setModalData(item)
+                                        }}>
+                                            <div className="d-flex">
+                                                <Avatar
+                                                    style={{ background: "#2B76D2", marginRight: "10px" }}
+                                                    name={item.notification_title}
+                                                    size="30"
+                                                    round
+                                                    color="primary"
+                                                />
+
+                                                <div style={{ paddingRight: "10px", textAlign: "left" }}>
+                                                    <h6>
+                                                        {item.notification_title}
+                                                        {/* {notifier === item.id && (
                                                         <Spinner size={"sm"} color="primary" />
                                                     )} */}
-                                                </h6>
+                                                    </h6>
 
-                                                <p>{item.notification_text}</p>
+                                                    <p>{item.notification_text}</p>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <button onClick={() => readMessage(item.id)}>
+
                                             {/* <Link
                       target="_blank"
                       to={`/arm-${item.module_name
                         .toLowerCase()
                         .replace(/ /g, "-")}/view/${item.resource_number}`}
                     > */}
-                                            view
+                                            {/* view */}
                                             {/* </Link> */}
                                         </button>
                                     </div>
@@ -192,6 +197,16 @@ function NotificationDropdown({ direction, ...args }) {
                     </PerfectScrollbar>
                 </DropdownMenu>
             </Dropdown>
+            <Dialog open={openModal} onClose={() => setOpenModal(false)} fullWidth>
+                <DialogTitle>OFFER</DialogTitle>
+                <DialogContent >
+                    <h1 style={{ color: "#2b76d2", fontFamily: "Poppins,sans-serif" }}>{modalData.notification_title}</h1>
+                    <p style={{ color: "gray", fontFamily: "Poppins,sans-serif" }}>{modalData.notification_text}</p>
+                </DialogContent>
+                <DialogActions>
+                    <Button style={{ background: "#2b76d2" }} onClick={() => setOpenModal(false)}>Close</Button>
+                </DialogActions>
+            </Dialog>
         </Fragment>
     )
 }
